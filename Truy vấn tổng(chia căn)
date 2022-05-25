@@ -1,0 +1,53 @@
+
+#include<bits/stdc++.h>
+#define fi first
+#define se second
+#define ll long long
+#define pb push_back
+#define mp make_pair
+
+using namespace std;
+
+int const N=2e5+7;
+int const oo=1e9+696969;
+int const bs=501;
+
+ll n,s[N],q,a[N];
+
+void built(){
+	for(int i=0;i<n;i++)
+		s[i/bs]+=a[i];
+}
+
+void update(ll pos,ll cost){
+	s[(pos-1)/bs]+=cost-a[pos-1];
+	a[pos-1]=cost;
+}
+
+ll get(ll u,ll v){
+	ll ans=0;
+	while(u<=v){
+		if(u%bs==0 && u+bs<v){
+			ans+=s[u/bs];
+			u+=bs;
+		}else{
+			ans+=a[u];
+			u++;
+		}
+	}
+	return ans;
+}
+
+int main(){
+	ios_base::sync_with_stdio(0);
+	cin.tie(0);
+	cin>>n>>q;
+	for(int i=0;i<n;i++) cin>>a[i];
+	built();
+	for(int i=1;i<=q;i++){
+		int t,l,r;
+		cin>>t>>l>>r;
+		if(t==1) update(l,r);
+		else cout<<get(l-1,r-1)<<"\n";
+	}
+}
